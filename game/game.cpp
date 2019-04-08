@@ -5,12 +5,19 @@
 // project (moving the little green ship). 
 //========================================================
 #include <iostream>
+#include <list>
 using namespace std;
 #include <SFML/Graphics.hpp>
+#include "Missile.h"
+#include "MissleMgr.h"
+#include "AlienMgr.h"
+#include "Player.h"
 using namespace sf; 
 
 //============================================================
-// YOUR HEADER WITH YOUR NAME GOES HERE. PLEASE DO NOT FORGET THIS
+// Preston Harrod
+// 4/19/19
+// Final Project: Space Invaders
 //============================================================
 
 // note: a Sprite represents an image on screen. A sprite knows and remembers its own position
@@ -60,6 +67,14 @@ int main()
 		cout << "Unable to load stars texture!" << endl;
 		exit(EXIT_FAILURE);
 	}
+	Texture missleTexture;
+	if (!missleTexture.loadFromFile("missile.png"))
+	{
+		cout << "Unable to load missile texture!" << endl;
+		exit(EXIT_FAILURE);
+	}
+
+
 
 	// A sprite is a thing we can draw and manipulate on the screen.
 	// We have to give it a "texture" to specify what it looks like
@@ -72,19 +87,29 @@ int main()
 	// create sprite and texture it
 	Sprite ship;
 	ship.setTexture(shipTexture);
-
-
+	
 	// initial position of the ship will be approx middle of screen
 	float shipX = window.getSize().x / 2.0f;
 	float shipY = window.getSize().y / 2.0f;
 	ship.setPosition(shipX, shipY);
+	
+	MissileMgr missileMgr;
+	AlienMgr alienMgr;
+	Player player;
 
-
+	int counter = 0;
+	bool shoot;
 	while (window.isOpen())
 	{
 		// check all the window's events that were triggered since the last iteration of the loop
 		// For now, we just need this so we can click on the window and close it
 		Event event;
+	
+		counter++;
+		if ((counter % 15) == 14)
+		{
+			shoot = true;
+		}
 
 		while (window.pollEvent(event))
 		{
@@ -93,9 +118,10 @@ int main()
 				window.close();
 			else if (event.type == Event::KeyPressed)
 			{
-				if (event.key.code == Keyboard::Space)
+				if (event.key.code == Keyboard::Space && shoot == true)
 				{
-					// handle space bar
+					missileMgr.addMissile(ship.getPosition());
+					shoot = false;
 				}
 				
 			}
@@ -110,8 +136,16 @@ int main()
 		// draw background first, so everything that's drawn later 
 		// will appear on top of background
 		window.draw(background);
+		missileMgr.drawMissiles(window);
+		
+		alienMgr.setHit(missileMgr);
+		alienMgr.removeAlien(player);
+		alienMgr.draw(window);
 
+		missileMgr.deleteMissile(background);
 		moveShip(ship);
+
+		player.draw(window);
 
 		// draw the ship on top of background 
 		// (the ship from previous frame was erased when we drew background)
