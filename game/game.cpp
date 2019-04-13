@@ -12,6 +12,10 @@ using namespace std;
 #include "MissleMgr.h"
 #include "AlienMgr.h"
 #include "Player.h"
+#include "Bomb.h"
+#include "BombMgr.h"
+#include <stdlib.h>     
+#include <time.h> 
 using namespace sf; 
 
 //============================================================
@@ -95,7 +99,8 @@ int main()
 	
 	MissileMgr missileMgr;
 	AlienMgr alienMgr;
-	Player player;
+	BombMgr bombMgr;
+	Player play;
 
 	int counter = 0;
 	bool shoot;
@@ -139,13 +144,22 @@ int main()
 		missileMgr.drawMissiles(window);
 		
 		alienMgr.setHit(missileMgr);
-		alienMgr.removeAlien(player);
+		alienMgr.removeAlien(ship);
 		alienMgr.draw(window);
-
+		/*
+		if ((counter % 15) == 14)
+		{
+			Vector2f pos;
+			pos = alienMgr.getRandomAlienPosition();
+			bombMgr.addBomb(pos);
+		}
+*/
+		//bombMgr.draw(window);
+		// draw bombs in the bomb list
 		missileMgr.deleteMissile(background);
 		moveShip(ship);
 
-		player.draw(window);
+		play.draw(window);
 
 		// draw the ship on top of background 
 		// (the ship from previous frame was erased when we drew background)

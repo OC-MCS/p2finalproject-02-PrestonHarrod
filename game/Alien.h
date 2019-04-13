@@ -4,6 +4,8 @@ using namespace std;
 #include <SFML/Graphics.hpp>
 using namespace sf;
 #include <list>
+#include "Bomb.h"
+#include "BombMgr.h"
 
 class Alien
 {
@@ -48,7 +50,13 @@ public:
 	void draw(RenderWindow &win)
 	{
 		win.draw(alien);
-		alien.move(0, 0.3f);
+		alien.move(0, 0.5f);
+	}
+
+	void dropbomb(BombMgr list)
+	{
+		Bomb* bomb = new Bomb(alien.getPosition());
+		list.addBomb(*bomb);
 	}
 
 };

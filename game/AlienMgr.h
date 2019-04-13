@@ -6,6 +6,10 @@ using namespace std;
 using namespace sf;
 #include <list>
 #include "Player.h"
+#include "Bomb.h"
+#include "BombMgr.h"
+#include <stdlib.h>    
+#include <time.h> 
 
 class AlienMgr
 {
@@ -32,15 +36,14 @@ public:
 		alienList.push_back(*alien);
 	}
 
-	void removeAlien(Player &p)
+	void removeAlien(Sprite &s)
 	{
 		list<Alien>::iterator iter;
 		for (iter = alienList.begin(); iter != alienList.end(); )
 		{
-			if (iter->returnHit() == true)
+			if (iter->returnHit() == true | iter->getPosition().y >= s.getPosition().y)
 			{
 				iter = alienList.erase(iter);
-				p.deleteLife();
 			}
 			else
 				iter++;
@@ -57,8 +60,9 @@ public:
 		}
 	}
 
-	void setHit(MissileMgr mgr)
+	void setHit(MissileMgr &mgr)
 	{
+		bool x;
 		list<Alien>::iterator iter;
 		list<Missile>::iterator it;
 		list<Missile> missilelist = mgr.returnMissileList();
@@ -70,6 +74,25 @@ public:
 				iter->sethit(it->getPosition(), *it);
 			}
 		}
+	}
+
+	Vector2f getRandomAlienPosition()
+	{
+		int counter = -1;
+		int randomAlien;
+		srand(time(NULL));
+		randomAlien = rand() % 10 + 1;
+
+		list<Alien>::iterator iter;
+		for (iter = alienList.begin(); iter != alienList.end(); iter++)
+		{
+			counter++;
+			if (counter == randomAlien)
+			{
+				return iter->getPosition();
+			}
+		}
+		// get random alien from linked list of aliens
 	}
 
 

@@ -24,7 +24,7 @@ public:
 		
 	}
 
-	void deleteMissile(Sprite s)
+	void deleteMissile(Sprite &s)
 	{
 		list<Missile>::iterator iter;
 
@@ -33,10 +33,12 @@ public:
 			if (!s.getGlobalBounds().contains(iter->getPosition()))
 			{
 				iter = missileList.erase(iter);
+				cout << "Missile hit bounds";
 			}
 			else if (iter->getCollision() == true)
 			{
 				iter = missileList.erase(iter);
+				cout << "Missile hit alien";
 			}
 			else
 				iter++;
