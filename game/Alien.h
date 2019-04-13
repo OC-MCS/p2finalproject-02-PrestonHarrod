@@ -14,17 +14,10 @@ private:
 	bool hit;
 
 public:
-	Alien(Vector2f pos)
+	Alien(Vector2f pos, Texture &text)
 	{
 		alien.setPosition(pos);
-
-		Texture alienTexture;
-		if (!alienTexture.loadFromFile("alien.png"))
-		{
-			cout << "Unable to load missile texture!" << endl;
-			exit(EXIT_FAILURE);
-		}
-		alien.setTexture(alienTexture);
+		alien.setTexture(text);
 		alien.setScale(0.025, 0.025);
 	}
 

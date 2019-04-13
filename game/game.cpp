@@ -77,6 +77,18 @@ int main()
 		cout << "Unable to load missile texture!" << endl;
 		exit(EXIT_FAILURE);
 	}
+	Texture AlienTexture;
+	if (!AlienTexture.loadFromFile("alien.png"))
+	{
+		cout << "unable to load alien texture" << endl;
+		exit(EXIT_FAILURE);
+	}
+	Texture bombtexture;
+	if (!bombtexture.loadFromFile("bomb.png"))
+	{
+		cout << "unable to load bomb texture" << endl;
+		exit(EXIT_FAILURE);
+	}
 
 
 
@@ -98,7 +110,7 @@ int main()
 	ship.setPosition(shipX, shipY);
 	
 	MissileMgr missileMgr;
-	AlienMgr alienMgr;
+	AlienMgr alienMgr(AlienTexture);
 	BombMgr bombMgr;
 	Player play;
 
@@ -125,7 +137,7 @@ int main()
 			{
 				if (event.key.code == Keyboard::Space && shoot == true)
 				{
-					missileMgr.addMissile(ship.getPosition());
+					missileMgr.addMissile(ship.getPosition(), missleTexture);
 					shoot = false;
 				}
 				

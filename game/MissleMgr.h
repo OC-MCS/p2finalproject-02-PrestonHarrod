@@ -1,15 +1,19 @@
 #pragma once
 #include "Missile.h"
-
+#include <iostream>
+using namespace std;
+#include <SFML/Graphics.hpp>
+using namespace sf;
+#include <list>
 class MissileMgr
 {
 private:
 	list<Missile> missileList;
 public:
 
-	void addMissile(Vector2f pos)
+	void addMissile(Vector2f pos, Texture &text)
 	{
-		Missile *missile = new Missile(pos);
+		Missile *missile = new Missile(pos, text);
 		missileList.push_back(*missile);
 	}
 

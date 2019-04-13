@@ -11,18 +11,12 @@ private:
 	Sprite missile;
 	bool collide;
 public:
-	Missile(Vector2f pos)
+	Missile(Vector2f pos, Texture &text)
 	{
 		collide = false;
 		missile.setPosition(pos);
-		Texture missileTexture;
-		if (!missileTexture.loadFromFile("missile.png"))
-		{
-			cout << "Unable to load missile texture!" << endl;
-			exit(EXIT_FAILURE);
-		}
-		missile.setTexture(missileTexture);
-		missile.setScale(0.5, 0.5);
+		missile.setTexture(text);
+		
 	}
 
 	bool getCollision()

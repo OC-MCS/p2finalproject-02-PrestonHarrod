@@ -18,7 +18,7 @@ private:
 	list<Alien>::iterator iter;
 
 public:
-	AlienMgr()
+	AlienMgr(Texture &text)
 	{
 		Vector2f pos;
 		pos.y = 20;
@@ -26,13 +26,14 @@ public:
 		for (int i = 0; i < 10; i++)
 		{
 			pos.x += 65;
-			addAlien(pos);
+			addAlien(pos, text);
 		}
+		
 	}
 
-	void addAlien(Vector2f pos)
+	void addAlien(Vector2f pos, Texture &text)
 	{
-		Alien *alien = new Alien(pos);
+		Alien *alien = new Alien(pos, text);
 		alienList.push_back(*alien);
 	}
 
