@@ -93,7 +93,6 @@ public:
 				return iter->getPosition();
 			}
 		}
-		// get random alien from linked list of aliens
 	}
 
 

@@ -21,6 +21,7 @@ public:
 		alien.setScale(0.025, 0.025);
 	}
 
+
 	bool returnHit()
 	{
 		return hit;

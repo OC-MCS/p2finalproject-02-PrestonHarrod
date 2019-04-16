@@ -7,6 +7,7 @@ using namespace sf;
 #include "Bomb.h"
 #include <stdlib.h>     
 #include <time.h> 
+#include "Player.h"
 
 class Bomb
 {
@@ -32,7 +33,26 @@ public:
 	void draw(RenderWindow &win)
 	{
 		win.draw(bomb);
-		bomb.move(0, 1.0f);
+		bomb.move(0, 1.3f);
+	}
+
+	bool returnHit()
+	{
+		return hit;
+	}
+
+	Vector2f getPosition()
+	{
+		return bomb.getPosition();
+	}
+
+	void sethit(Vector2f shippos, Player p)
+	{
+		if (bomb.getGlobalBounds().contains(shippos))
+		{
+			hit = true;
+			p.deleteLife();
+		}
 	}
 	
 };

@@ -7,6 +7,7 @@ using namespace sf;
 #include "Bomb.h"
 #include <stdlib.h>     
 #include <time.h> 
+#include "Player.h"
 
 class BombMgr
 {
@@ -22,7 +23,21 @@ public:
 	{
 		bombList.push_back(a);
 	}
-	void removeBomb();
+	void removeBomb(Sprite &s, Player p)
+	{
+		list<Bomb>::iterator iter;
+		for (iter = bombList.begin(); iter != bombList.end(); )
+		{
+			if (iter->returnHit() == true | iter->getPosition().y >= s.getPosition().y)
+			{
+				iter = bombList.erase(iter);
+				cout << "bomb removed";
+			}
+			else
+				iter++;
+		}
+
+	}
 	void draw(RenderWindow &win)
 	{
 		list<Bomb>::iterator iter;

@@ -158,15 +158,15 @@ int main()
 		alienMgr.setHit(missileMgr);
 		alienMgr.removeAlien(ship);
 		alienMgr.draw(window);
-		/*
-		if ((counter % 15) == 14)
+	
+		if ((counter % 210) == 90)
 		{
 			Vector2f pos;
 			pos = alienMgr.getRandomAlienPosition();
 			bombMgr.addBomb(pos);
 		}
-*/
-		//bombMgr.draw(window);
+		bombMgr.removeBomb(ship, play);
+		bombMgr.draw(window);
 		// draw bombs in the bomb list
 		missileMgr.deleteMissile(background);
 		moveShip(ship);
