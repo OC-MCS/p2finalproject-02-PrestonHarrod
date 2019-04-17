@@ -46,12 +46,12 @@ public:
 		return bomb.getPosition();
 	}
 
-	void sethit(Vector2f shippos, Player p)
+	void sethit(Vector2f shippos)
 	{
 		if (bomb.getGlobalBounds().contains(shippos))
 		{
+			cout << "SHIP HIT";
 			hit = true;
-			p.deleteLife();
 		}
 	}
 	

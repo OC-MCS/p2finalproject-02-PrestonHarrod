@@ -47,7 +47,7 @@ public:
 		alien.move(0, 0.5f);
 	}
 
-	void dropbomb(BombMgr list)
+	void dropbomb(Texture &text, BombMgr &list)
 	{
 		Bomb* bomb = new Bomb(alien.getPosition());
 		list.addBomb(*bomb);

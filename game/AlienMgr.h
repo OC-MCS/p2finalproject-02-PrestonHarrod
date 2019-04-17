@@ -42,12 +42,19 @@ public:
 		list<Alien>::iterator iter;
 		for (iter = alienList.begin(); iter != alienList.end(); )
 		{
-			if (iter->returnHit() == true | iter->getPosition().y >= s.getPosition().y)
+			if (iter->returnHit() == true || !s.getGlobalBounds().contains(iter->getPosition()))
 			{
 				iter = alienList.erase(iter);
 			}
-			else
+			else if (!s.getGlobalBounds().contains(iter->getPosition()))
+			{
+				iter = alienList.erase(iter);
+			}
+			else 
+			{
 				iter++;
+			}
+				
 		}
 	}
 
@@ -77,22 +84,27 @@ public:
 		}
 	}
 
-	Vector2f getRandomAlienPosition()
+	void dropBombs(Texture &text, BombMgr &bombMgr)
 	{
-		int counter = -1;
-		int randomAlien;
-		srand(time(NULL));
-		randomAlien = rand() % 10 + 1;
-
+		int x;
 		list<Alien>::iterator iter;
-		for (iter = alienList.begin(); iter != alienList.end(); iter++)
+		srand(time(0));
+
+		bool shoot = true;
+		for (iter = alienList.begin(); iter != alienList.end() && shoot == true; iter++)
 		{
-			counter++;
-			if (counter == randomAlien)
+			x = (rand() % 10);
+			if (x == 1)
 			{
-				return iter->getPosition();
+				iter->dropbomb(text, bombMgr);
+				shoot = false;
 			}
 		}
+	}
+
+	int returnAlienCount()
+	{
+		return alienList.size();
 	}
 
 

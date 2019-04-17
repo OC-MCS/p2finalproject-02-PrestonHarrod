@@ -106,43 +106,175 @@ int main()
 	
 	// initial position of the ship will be approx middle of screen
 	float shipX = window.getSize().x / 2.0f;
-	float shipY = window.getSize().y / 2.0f;
+	float shipY = window.getSize().y / 1.2f;
 	ship.setPosition(shipX, shipY);
 	
 	MissileMgr missileMgr;
 	AlienMgr alienMgr(AlienTexture);
+	AlienMgr level2Aliens(AlienTexture);
 	BombMgr bombMgr;
 	Player play;
 
+	int randomNum;
+	bool drop;
+
 	int counter = 0;
+	int kills;
 	bool shoot;
 	while (window.isOpen())
 	{
-		// check all the window's events that were triggered since the last iteration of the loop
-		// For now, we just need this so we can click on the window and close it
+
 		Event event;
-	
-		counter++;
-		if ((counter % 15) == 14)
+		if (play.getLevel() == 0) // no level
 		{
-			shoot = true;
+
+			while (window.pollEvent(event))
+			{
+				// "close requested" event: we close the window
+				if (event.type == Event::Closed)
+					window.close();
+
+
+				else if (event.type == Event::MouseButtonReleased)
+				{
+					//userinput for settings
+					Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
+					play.startinput(mousePos);
+
+				}
+
+			}
+			window.clear();
+			window.draw(background);
+			play.drawStart(window);
+			window.display();
+		}
+		else if (play.getLevel() == 1 && play.getLives() > 0) //level 1
+		{
+			counter++;
+			if ((counter % 15) == 14)
+			{
+				shoot = true;
+			}
+			while (window.pollEvent(event))
+			{
+				// "close requested" event: we close the window
+				if (event.type == Event::Closed)
+					window.close();
+				else if (event.type == Event::KeyPressed)
+				{
+					if (event.key.code == Keyboard::Space && shoot == true)
+					{
+						// handle space bar
+						Missile *missile = new Missile(ship.getPosition(), missleTexture);
+						missileMgr.addMissile(*missile);
+						shoot = false;
+					}
+
+				}
+			}
+			window.clear();
+			window.draw(background);
+			moveShip(ship);
+			window.draw(ship);
+			if (counter % 20 == 1)
+			{
+				drop = true;
+			}
+			randomNum = (rand() % 30);
+			if (randomNum == 1 && drop == true)
+			{
+				alienMgr.dropBombs(bombtexture, bombMgr);
+				drop = false;
+			}
+
+			play.drawKillAmount(window);
+			play.setKills(counter);
+			play.drawLives(window);
+			play.drawLevel(window);
+
+			alienMgr.setHit(missileMgr);
+			alienMgr.removeAlien(background);
+			alienMgr.draw(window);
+
+			bombMgr.removeBomb(ship, play);
+			bombMgr.draw(window);
+			missileMgr.removeMissile(background);
+			missileMgr.drawMissiles(window);
+			if (alienMgr.returnAlienCount() == 0)
+			{
+				play.setLevel(2);
+			}
+			window.display();
+		}
+		else if (play.getLevel() == 2 && play.getLives() > 0) //notcleared == true && numlives > 0)
+		{
+			counter++;
+			if ((counter % 15) == 14)
+			{
+				shoot = true;
+			}
+			while (window.pollEvent(event))
+			{
+				// "close requested" event: we close the window
+				if (event.type == Event::Closed)
+					window.close();
+				else if (event.type == Event::KeyPressed)
+				{
+					if (event.key.code == Keyboard::Space && shoot == true)
+					{
+						// handle space bar
+						Missile *missile = new Missile(ship.getPosition(), missleTexture);
+						missileMgr.addMissile(*missile);
+						shoot = false;
+					}
+
+				}
+			}
+			window.clear();
+			window.draw(background);
+			moveShip(ship);
+			window.draw(ship);
+			if (counter % 20 == 1)
+			{
+				drop = true;
+			}
+			randomNum = (rand() % 30);
+			if (randomNum == 1 && drop == true)
+			{
+				level2Aliens.dropBombs(bombtexture, bombMgr);
+				drop = false;
+			}
+
+			play.drawKillAmount(window);
+			play.setKills(counter);
+			play.drawLives(window);
+			play.drawLevel(window);
+			level2Aliens.setHit(missileMgr);
+			level2Aliens.removeAlien(background);
+			level2Aliens.draw(window);
+			bombMgr.removeBomb(ship, play);
+			bombMgr.draw(window);
+			missileMgr.removeMissile(background);
+			missileMgr.drawMissiles(window);
+
+			window.display();
+		}
+		else if (play.getLives() == 0)
+		{
+			play.drawEndGame(window);
+		}
+		else
+		{
+			play.drawWinner(window);
 		}
 
-		while (window.pollEvent(event))
-		{
-			// "close requested" event: we close the window
-			if (event.type == Event::Closed)
-				window.close();
-			else if (event.type == Event::KeyPressed)
-			{
-				if (event.key.code == Keyboard::Space && shoot == true)
-				{
-					missileMgr.addMissile(ship.getPosition(), missleTexture);
-					shoot = false;
-				}
-				
-			}
-		}
+
+		// check all the window's events that were triggered since the last iteration of the loop
+		// For now, we just need this so we can click on the window and close it
+
+
+
 
 		//===========================================================
 		// Everything from here to the end of the loop is where you put your
@@ -150,37 +282,23 @@ int main()
 		// render the next frame, and so on. All this happens ~ 60 times/second.
 		//===========================================================
 
+
 		// draw background first, so everything that's drawn later 
 		// will appear on top of background
 		window.draw(background);
-		missileMgr.drawMissiles(window);
-		
-		alienMgr.setHit(missileMgr);
-		alienMgr.removeAlien(ship);
-		alienMgr.draw(window);
-	
-		if ((counter % 210) == 90)
-		{
-			Vector2f pos;
-			pos = alienMgr.getRandomAlienPosition();
-			bombMgr.addBomb(pos);
-		}
-		bombMgr.removeBomb(ship, play);
-		bombMgr.draw(window);
-		// draw bombs in the bomb list
-		missileMgr.deleteMissile(background);
-		moveShip(ship);
 
-		play.draw(window);
+
+
+
+
+		//userint.drawNUMLEVEL(window);
 
 		// draw the ship on top of background 
 		// (the ship from previous frame was erased when we drew background)
-		window.draw(ship);
 
 
 		// end the current frame; this makes everything that we have 
 		// already "drawn" actually show up on the screen
-		window.display();
 
 		// At this point the frame we have built is now visible on screen.
 		// Now control will go back to the top of the animation loop
@@ -191,4 +309,5 @@ int main()
 
 	return 0;
 }
+
 

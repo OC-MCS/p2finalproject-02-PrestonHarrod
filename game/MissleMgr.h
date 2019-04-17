@@ -11,10 +11,9 @@ private:
 	list<Missile> missileList;
 public:
 
-	void addMissile(Vector2f pos, Texture &text)
+	void addMissile(Missile m)
 	{
-		Missile *missile = new Missile(pos, text);
-		missileList.push_back(*missile);
+		missileList.push_back(m);
 	}
 
 	void drawMissiles(RenderWindow &win)
@@ -28,25 +27,20 @@ public:
 		
 	}
 
-	void deleteMissile(Sprite &s)
+	void removeMissile(Sprite background)
 	{
 		list<Missile>::iterator iter;
-
 		for (iter = missileList.begin(); iter != missileList.end(); )
 		{
-			if (!s.getGlobalBounds().contains(iter->getPosition()))
+			if (!background.getGlobalBounds().contains(iter->getPosition()) || iter->getCollision() == true)
 			{
 				iter = missileList.erase(iter);
-				cout << "Missile hit bounds";
-			}
-			else if (iter->getCollision() == true)
-			{
-				iter = missileList.erase(iter);
-				cout << "Missile hit alien";
+				cout << "worked";
 			}
 			else
 				iter++;
 		}
+
 	}
 
 	list<Missile> returnMissileList()

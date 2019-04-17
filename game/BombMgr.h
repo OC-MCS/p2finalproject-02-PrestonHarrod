@@ -28,10 +28,16 @@ public:
 		list<Bomb>::iterator iter;
 		for (iter = bombList.begin(); iter != bombList.end(); )
 		{
-			if (iter->returnHit() == true | iter->getPosition().y >= s.getPosition().y)
+			if (iter->returnHit() == true)
 			{
 				iter = bombList.erase(iter);
-				cout << "bomb removed";
+				int life = p.getLives();
+				p.setLives(life--);
+				cout << "LIFE REMOVED ";
+			}
+			else if (iter->getPosition().y > s.getPosition().y + 50)
+			{
+				iter = bombList.erase(iter);
 			}
 			else
 				iter++;

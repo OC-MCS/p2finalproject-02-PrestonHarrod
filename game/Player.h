@@ -3,79 +3,136 @@
 using namespace std;
 #include <SFML/Graphics.hpp>
 using namespace sf;
-#include <list>
 
 class Player
 {
 private:
-	int numlives;
-	CircleShape life1;
-	CircleShape life2;
-	CircleShape life3;
-	
+	int level;
+	int lives;
+	int aliensKilled;
+	RectangleShape startBtn;
 public:
 	Player()
 	{
-		numlives = 3;
+		level = 0;
+		lives = 3;
+		aliensKilled = 0;
+		Vector2f size;
+		size.x = 67;
+		size.y = 30;
+		startBtn.setSize(size);
+		startBtn.setPosition(366, 300);
+		startBtn.setFillColor(Color::White);
 	}
-	int getlives()
-	{
-		return numlives;
-	}
-	void deleteLife()
-	{
-		numlives -= 1;
-		if (numlives == 2)
-		{
-			life3.setFillColor(Color::Transparent);
-		}
-		else if (numlives == 1)
-		{
-			life2.setFillColor(Color::Transparent);
-		}
-		else if (numlives == 0)
-		{
-			life1.setFillColor(Color::Transparent);
-			//endGame();
-		}
-
-	}
-
-	void setLives(int x)
-	{
-		numlives = x;
-	}
-
-	void draw(RenderWindow & win)
+	
+	void drawStart(RenderWindow & win)
 	{
 		Font font;
-		if (!font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf"))
-			cout << "couldn't load font";
-		Text title("Lives", font, 20);
-		Text lives;
-		title.setPosition(30, 25);
-		win.draw(title);
-
-		Vector2f pos(100, 30);
-		Vector2f pos2(125, 30);
-		Vector2f pos3(150, 30);
-
-		life1.setPosition(pos);
-		life2.setPosition(pos2);
-		life3.setPosition(pos3);
-
-		life1.setRadius(5);
-		life2.setRadius(5);
-		life3.setRadius(5);
-
-		life1.setFillColor(Color::Green);
-		life2.setFillColor(Color::Green);
-		life3.setFillColor(Color::Green);
-
-		win.draw(life1);
-		win.draw(life2);
-		win.draw(life3);
-
+		if (!font.loadFromFile("C://Windows//Fonts//arial.ttf"))
+		{
+			cout << ("couldn't load font");
+		}
+		Text text("START", font, 25);
+		text.setPosition(startBtn.getPosition());
+		text.setFillColor(Color::Green);
+		win.draw(startBtn);
+		win.draw(text);
+	}
+	void startinput(Vector2f mousepos)
+	{
+		if (startBtn.getGlobalBounds().contains(mousepos))
+		{
+			level = 1;
+		}
+	}
+	void drawKillAmount(RenderWindow & win)
+	{
+		Font font;
+		if (!font.loadFromFile("C://Windows//Fonts//arial.ttf"))
+		{
+			cout << ("couldn't load font");
+		}
+		string displaykilled = "ALIENS DEFEATED: " + to_string(aliensKilled);
+		Text numkilled(displaykilled, font, 25);
+		numkilled.setPosition(0, 0);
+		numkilled.setFillColor(Color::White);
+		win.draw(numkilled);
+	}
+	void drawLevel(RenderWindow & win)
+	{
+		Font font;
+		if (!font.loadFromFile("C://Windows//Fonts//arial.ttf"))
+		{
+			cout << ("couldn't load font");
+		}
+		string displaylevel = "LEVEL:  " + to_string(level);
+		Text levelnum(displaylevel, font, 25);
+		levelnum.setPosition(275, 0);
+		levelnum.setFillColor(Color::White);
+		win.draw(levelnum);
+	}
+	void drawEndGame(RenderWindow & win)
+	{
+		Font font;
+		if (!font.loadFromFile("C://Windows//Fonts//arial.ttf"))
+		{
+			cout << ("couldn't load font");
+		}
+		string gameoverstring = "GAME OVER: THE ALIENS ARE VICTORIOUS!";
+		Text gameoverdisplay(gameoverstring, font, 40);
+		gameoverdisplay.setPosition(300, 400);
+		gameoverdisplay.setFillColor(Color::White);
+		win.draw(gameoverdisplay);
+	}
+	void drawWinner(RenderWindow & win)
+	{
+		Font font;
+		if (!font.loadFromFile("C://Windows//Fonts//arial.ttf"))
+		{
+			cout << ("couldn't load font");
+		}
+		string youWinString = "YOU WIN: THE ALIENS HAVE BEEN DEFEATED!";
+		Text windisplay(youWinString, font, 40);
+		windisplay.setPosition(300, 400);
+		windisplay.setFillColor(Color::White);
+		win.draw(windisplay);
+	}
+	void drawLives(RenderWindow & win)
+	{
+		Font font;
+		if (!font.loadFromFile("C://Windows//Fonts//arial.ttf"))
+		{
+			cout << ("couldn't load font");
+		}
+		string displaylives = "LIVES:  " + to_string(lives);
+		Text livesnum(displaylives, font, 25);
+		livesnum.setPosition(400, 0);
+		livesnum.setFillColor(Color::White);
+		win.draw(livesnum);
 	}
 
+	int getLevel()
+	{
+		return level;
+	}
+	int getLives()
+	{
+		return lives;
+	}
+	int getKills()
+	{
+		return aliensKilled;
+	}
+	void setLevel(int x)
+	{
+		level = x;
+	}
+	void setLives(int x)
+	{
+		lives = x;
+	}
+	void setKills(int x)
+	{
+		aliensKilled = x;
+	}
 };

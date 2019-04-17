@@ -11,12 +11,11 @@ private:
 	Sprite missile;
 	bool collide;
 public:
-	Missile(Vector2f pos, Texture &text)
+	Missile(Vector2f pos, const Texture & text)
 	{
-		collide = false;
 		missile.setPosition(pos);
 		missile.setTexture(text);
-		
+		collide = false;
 	}
 
 	bool getCollision()
