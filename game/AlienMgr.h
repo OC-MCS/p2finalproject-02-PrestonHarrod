@@ -37,18 +37,28 @@ public:
 		alienList.push_back(*alien);
 	}
 
-	void removeAlien(Sprite &s)
+	void removeAlien(Sprite &s, Player &p)
 	{
 		list<Alien>::iterator iter;
 		for (iter = alienList.begin(); iter != alienList.end(); )
 		{
-			if (iter->returnHit() == true || !s.getGlobalBounds().contains(iter->getPosition()))
+			if (iter->returnHit() == true)
 			{
+				int kills = p.getKills();
+				kills++;
+				p.setKills(kills);
 				iter = alienList.erase(iter);
 			}
-			else if (!s.getGlobalBounds().contains(iter->getPosition()))
+			else if (iter->getPosition().y > s.getPosition().y + 20)
 			{
-				iter = alienList.erase(iter);
+				Vector2f initial = iter->returnInitialPos();
+				iter->setPosition(initial);
+				cout << "alien deleted";
+				int life = p.getLives();
+				life--;
+				p.setLives(life);
+				
+				cout << "delete life ";
 			}
 			else 
 			{
@@ -70,7 +80,6 @@ public:
 
 	void setHit(MissileMgr &mgr)
 	{
-		bool x;
 		list<Alien>::iterator iter;
 		list<Missile>::iterator it;
 		list<Missile> missilelist = mgr.returnMissileList();
@@ -79,7 +88,7 @@ public:
 		{
 			for (it = missilelist.begin(); it != missilelist.end(); it++)
 			{
-				iter->sethit(it->getPosition(), *it);
+				iter->sethit(it->getPosition());
 			}
 		}
 	}
@@ -106,7 +115,4 @@ public:
 	{
 		return alienList.size();
 	}
-
-
-
 };

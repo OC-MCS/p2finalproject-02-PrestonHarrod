@@ -16,24 +16,18 @@ private:
 	bool hit;
 
 public:
-	Bomb(Vector2f pos) 
+	Bomb(Vector2f pos, Texture &text) 
 	{
 		hit = false;
 		bomb.setPosition(pos);
-		Texture bombTexture;
-		if (!bombTexture.loadFromFile("bomb.png"))
-		{
-			cout << "Unable to load missile texture!" << endl;
-			exit(EXIT_FAILURE);
-		}
-		bomb.setTexture(bombTexture);
-		bomb.setScale(0.025, 0.025);
+		bomb.setTexture(text);
+		bomb.setScale(0.10, 0.10);
 	}
 
 	void draw(RenderWindow &win)
 	{
 		win.draw(bomb);
-		bomb.move(0, 1.3f);
+		bomb.move(0, 4.0f);
 	}
 
 	bool returnHit()
@@ -50,7 +44,7 @@ public:
 	{
 		if (bomb.getGlobalBounds().contains(shippos))
 		{
-			cout << "SHIP HIT";
+			cout << "ship was hit by bomb";
 			hit = true;
 		}
 	}

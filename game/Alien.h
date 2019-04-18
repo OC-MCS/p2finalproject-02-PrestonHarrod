@@ -12,13 +12,15 @@ class Alien
 private:
 	Sprite alien;
 	bool hit;
+	Vector2f initialPos;
 
 public:
 	Alien(Vector2f pos, Texture &text)
 	{
 		alien.setPosition(pos);
 		alien.setTexture(text);
-		alien.setScale(0.025, 0.025);
+		initialPos = pos;
+		alien.setScale(0.050, 0.050);
 	}
 
 
@@ -27,12 +29,11 @@ public:
 		return hit;
 	}
 
-	void sethit(Vector2f missilePos, Missile mis)
+	void sethit(Vector2f missilePos)
 	{
 		if (alien.getGlobalBounds().contains(missilePos))
 		{
  			hit = true;
-			mis.setCollision(true);
 		}
 	}
 
@@ -44,13 +45,21 @@ public:
 	void draw(RenderWindow &win)
 	{
 		win.draw(alien);
-		alien.move(0, 0.5f);
+		alien.move(0, 1);
 	}
 
 	void dropbomb(Texture &text, BombMgr &list)
 	{
-		Bomb* bomb = new Bomb(alien.getPosition());
+		Bomb* bomb = new Bomb(alien.getPosition(), text);
 		list.addBomb(*bomb);
 	}
 
+	Vector2f returnInitialPos()
+	{
+		return initialPos;
+	}
+	void setPosition(Vector2f pos)
+	{
+		alien.setPosition(pos);
+	}
 };

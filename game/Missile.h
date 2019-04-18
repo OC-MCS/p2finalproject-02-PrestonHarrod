@@ -34,7 +34,7 @@ public:
 	void draw(RenderWindow &win)
 	{
 		win.draw(missile);
-		missile.move(0, -5.0f);
+		missile.move(0, -10.0f);
 	}
 
 	Vector2f getPosition()

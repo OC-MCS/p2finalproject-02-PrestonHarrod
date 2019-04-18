@@ -14,6 +14,7 @@ using namespace std;
 #include "Player.h"
 #include "Bomb.h"
 #include "BombMgr.h"
+#include "DrawUI.h"
 #include <stdlib.h>     
 #include <time.h> 
 using namespace sf; 
@@ -83,8 +84,14 @@ int main()
 		cout << "unable to load alien texture" << endl;
 		exit(EXIT_FAILURE);
 	}
-	Texture bombtexture;
-	if (!bombtexture.loadFromFile("bomb.png"))
+	Texture level2Alien;
+	if (!level2Alien.loadFromFile("level2.png"))
+	{
+		cout << "unable to load alien texture" << endl;
+		exit(EXIT_FAILURE);
+	}
+	Texture bombTexture;
+	if (!bombTexture.loadFromFile("drop.png"))
 	{
 		cout << "unable to load bomb texture" << endl;
 		exit(EXIT_FAILURE);
@@ -111,21 +118,22 @@ int main()
 	
 	MissileMgr missileMgr;
 	AlienMgr alienMgr(AlienTexture);
-	AlienMgr level2Aliens(AlienTexture);
+	AlienMgr level2Aliens(level2Alien);
 	BombMgr bombMgr;
 	Player play;
+	DrawUI drawUI;
 
 	int randomNum;
 	bool drop;
 
 	int counter = 0;
-	int kills;
-	bool shoot;
+	int kills = 0;
+	bool shoot = false;
 	while (window.isOpen())
 	{
 
 		Event event;
-		if (play.getLevel() == 0) // no level
+		if (play.getLevel() == 0) 
 		{
 
 			while (window.pollEvent(event))
@@ -139,14 +147,14 @@ int main()
 				{
 					//userinput for settings
 					Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
-					play.startinput(mousePos);
+					drawUI.startinput(mousePos, play);
 
 				}
 
 			}
 			window.clear();
 			window.draw(background);
-			play.drawStart(window);
+			drawUI.drawStart(window);
 			window.display();
 		}
 		else if (play.getLevel() == 1 && play.getLives() > 0) //level 1
@@ -181,23 +189,23 @@ int main()
 			{
 				drop = true;
 			}
-			randomNum = (rand() % 30);
+			randomNum = (rand() % 35);
 			if (randomNum == 1 && drop == true)
 			{
-				alienMgr.dropBombs(bombtexture, bombMgr);
+				alienMgr.dropBombs(bombTexture, bombMgr);
 				drop = false;
 			}
 
-			play.drawKillAmount(window);
-			play.setKills(counter);
-			play.drawLives(window);
-			play.drawLevel(window);
+			drawUI.drawKillAmount(window, play);
+			drawUI.drawLives(window, play);
+			drawUI.drawLevel(window, play);
 
 			alienMgr.setHit(missileMgr);
-			alienMgr.removeAlien(background);
+			alienMgr.removeAlien(ship, play);
 			alienMgr.draw(window);
 
 			bombMgr.removeBomb(ship, play);
+			bombMgr.setHits(ship);
 			bombMgr.draw(window);
 			missileMgr.removeMissile(background);
 			missileMgr.drawMissiles(window);
@@ -205,9 +213,24 @@ int main()
 			{
 				play.setLevel(2);
 			}
+
+			if (play.getLives() == 0)
+			{
+				window.clear();
+				window.draw(background);
+				drawUI.drawEndGame(window);
+			}
+
+			if (play.getKills() == 20)
+			{
+				window.clear();
+				window.draw(background);
+				drawUI.drawWinner(window);
+			}
+
 			window.display();
 		}
-		else if (play.getLevel() == 2 && play.getLives() > 0) //notcleared == true && numlives > 0)
+		else if (play.getLevel() == 2 && play.getLives() > 0)
 		{
 			counter++;
 			if ((counter % 15) == 14)
@@ -239,34 +262,40 @@ int main()
 			{
 				drop = true;
 			}
-			randomNum = (rand() % 30);
+			randomNum = (rand() % 35);
 			if (randomNum == 1 && drop == true)
 			{
-				level2Aliens.dropBombs(bombtexture, bombMgr);
+				level2Aliens.dropBombs(bombTexture, bombMgr);
 				drop = false;
 			}
 
-			play.drawKillAmount(window);
-			play.setKills(counter);
-			play.drawLives(window);
-			play.drawLevel(window);
+			drawUI.drawKillAmount(window, play);
+			drawUI.drawLives(window, play);
+			drawUI.drawLevel(window, play);
 			level2Aliens.setHit(missileMgr);
-			level2Aliens.removeAlien(background);
+			level2Aliens.removeAlien(ship, play);
 			level2Aliens.draw(window);
 			bombMgr.removeBomb(ship, play);
+			bombMgr.setHits(ship);
 			bombMgr.draw(window);
 			missileMgr.removeMissile(background);
 			missileMgr.drawMissiles(window);
 
+			if (play.getLives() == 0)
+			{
+				window.clear();
+				window.draw(background);
+				drawUI.drawEndGame(window);
+			}
+
+			if (play.getKills() == 20)
+			{
+				window.clear();
+				window.draw(background);
+				drawUI.drawWinner(window);
+			}
+
 			window.display();
-		}
-		else if (play.getLives() == 0)
-		{
-			play.drawEndGame(window);
-		}
-		else
-		{
-			play.drawWinner(window);
 		}
 
 

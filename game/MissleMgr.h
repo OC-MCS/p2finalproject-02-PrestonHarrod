@@ -35,7 +35,6 @@ public:
 			if (!background.getGlobalBounds().contains(iter->getPosition()) || iter->getCollision() == true)
 			{
 				iter = missileList.erase(iter);
-				cout << "worked";
 			}
 			else
 				iter++;
@@ -48,4 +47,8 @@ public:
 		return missileList;
 	}
 
+	void setList(list<Missile> x)
+	{
+		missileList = x;
+	}
 };

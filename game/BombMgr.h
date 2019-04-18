@@ -23,7 +23,7 @@ public:
 	{
 		bombList.push_back(a);
 	}
-	void removeBomb(Sprite &s, Player p)
+	void removeBomb(Sprite &s, Player &p)
 	{
 		list<Bomb>::iterator iter;
 		for (iter = bombList.begin(); iter != bombList.end(); )
@@ -32,10 +32,11 @@ public:
 			{
 				iter = bombList.erase(iter);
 				int life = p.getLives();
-				p.setLives(life--);
-				cout << "LIFE REMOVED ";
+				life--;
+				p.setLives(life);
+				cout << "delete life ";
 			}
-			else if (iter->getPosition().y > s.getPosition().y + 50)
+			else if (iter->getPosition().y > s.getPosition().y + 20)
 			{
 				iter = bombList.erase(iter);
 			}
@@ -50,6 +51,15 @@ public:
 		for (iter = bombList.begin(); iter != bombList.end(); iter++)
 		{
 			iter->draw(win);
+		}
+	}
+
+	void setHits(Sprite &s)
+	{
+		list<Bomb>::iterator iter;
+		for (iter = bombList.begin(); iter != bombList.end(); iter++)
+		{
+			iter->sethit(s.getPosition());
 		}
 	}
 
