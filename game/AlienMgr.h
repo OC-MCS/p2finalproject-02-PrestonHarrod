@@ -15,7 +15,6 @@ class AlienMgr
 {
 private:
 	list<Alien> alienList;
-	list<Alien>::iterator iter;
 
 public:
 	AlienMgr(Texture &text)
@@ -53,12 +52,10 @@ public:
 			{
 				Vector2f initial = iter->returnInitialPos();
 				iter->setPosition(initial);
-				cout << "alien deleted";
 				int life = p.getLives();
 				life--;
 				p.setLives(life);
 				
-				cout << "delete life ";
 			}
 			else 
 			{

@@ -117,6 +117,7 @@ int main()
 	ship.setPosition(shipX, shipY);
 	
 	MissileMgr missileMgr;
+	AlienMgr initialaliens(AlienTexture);
 	AlienMgr alienMgr(AlienTexture);
 	AlienMgr level2Aliens(level2Alien);
 	BombMgr bombMgr;
