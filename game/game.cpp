@@ -47,6 +47,22 @@ void moveShip(Sprite& ship)
 	}
 }
 
+/*************
+resetGame
+- Sets kills, level, and lives to default settings,
+- and remakes each list of aliens
+Params: textures, player, and both lists of aliens
+****************/
+void resetGame(Texture &text, Texture &text2, Player &p, AlienMgr &mgr, AlienMgr &m)
+{
+	p.setKills(0);
+	p.setLevel(0);
+	p.setLives(3);
+	mgr.deleteList();
+	m.deleteList();
+	mgr.remakeList(text);
+	m.remakeList(text2);
+}
 
 
 int main()
@@ -130,6 +146,9 @@ int main()
 	int counter = 0;
 	int kills = 0;
 	bool shoot = false;
+	bool hasWon = false;
+	bool hasLost = false;
+	
 	while (window.isOpen())
 	{
 
@@ -148,7 +167,7 @@ int main()
 				{
 					//userinput for settings
 					Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
-					drawUI.startinput(mousePos, play);
+					drawUI.beginGame(mousePos, play);
 
 				}
 
@@ -156,10 +175,22 @@ int main()
 			window.clear();
 			window.draw(background);
 			drawUI.drawStart(window);
+			if (hasWon == true)
+			{
+				drawUI.drawWinner(window);
+			}
+			if (hasLost == true)
+			{
+				drawUI.drawEndGame(window);
+			}
 			window.display();
 		}
-		else if (play.getLevel() == 1 && play.getLives() > 0) //level 1
+		else if (play.getLevel() == 1 && play.getLives() > 0) 
 		{
+			if (hasWon == true)
+			{
+				drawUI.drawWinner(window);
+			}
 			counter++;
 			if ((counter % 15) == 14)
 			{
@@ -186,11 +217,11 @@ int main()
 			window.draw(background);
 			moveShip(ship);
 			window.draw(ship);
-			if (counter % 20 == 1)
+			if (counter % 50 == 1)
 			{
 				drop = true;
 			}
-			randomNum = (rand() % 35);
+			randomNum = (rand() % 20);
 			if (randomNum == 1 && drop == true)
 			{
 				alienMgr.dropBombs(bombTexture, bombMgr);
@@ -208,8 +239,10 @@ int main()
 			bombMgr.removeBomb(ship, play);
 			bombMgr.setHits(ship);
 			bombMgr.draw(window);
+
 			missileMgr.removeMissile(background);
 			missileMgr.drawMissiles(window);
+
 			if (alienMgr.returnAlienCount() == 0)
 			{
 				play.setLevel(2);
@@ -220,13 +253,9 @@ int main()
 				window.clear();
 				window.draw(background);
 				drawUI.drawEndGame(window);
-			}
-
-			if (play.getKills() == 20)
-			{
-				window.clear();
-				window.draw(background);
-				drawUI.drawWinner(window);
+				resetGame(AlienTexture, level2Alien, play, alienMgr, level2Aliens);
+				drawUI.drawStart(window);
+				hasLost = true;
 			}
 
 			window.display();
@@ -287,6 +316,12 @@ int main()
 				window.clear();
 				window.draw(background);
 				drawUI.drawEndGame(window);
+				resetGame(AlienTexture, level2Alien, play, alienMgr, level2Aliens);
+				//play.setKills(0);
+				//play.setLives(3);
+				//play.setLevel(0);
+				drawUI.drawStart(window);
+				hasLost = true;
 			}
 
 			if (play.getKills() == 20)
@@ -294,6 +329,12 @@ int main()
 				window.clear();
 				window.draw(background);
 				drawUI.drawWinner(window);
+				resetGame(AlienTexture, level2Alien, play, alienMgr, level2Aliens);
+				//play.setKills(0);
+				//play.setLevel(0);
+				//play.setLives(3);
+				drawUI.drawStart(window);
+				hasWon = true;
 			}
 
 			window.display();
@@ -339,5 +380,6 @@ int main()
 
 	return 0;
 }
+
 
 

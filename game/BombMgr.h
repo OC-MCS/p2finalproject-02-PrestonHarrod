@@ -19,10 +19,24 @@ public:
 	{
 		bombList = {};
 	}
+
+	/***************
+	addBomb
+	- adds bomb to list
+	Params: Bomb
+	REturns: none
+	*******************/
 	void addBomb(Bomb a)
 	{
 		bombList.push_back(a);
 	}
+
+	/***************
+	removeBomb
+	- If bomb has hit ship or goes beyond ship, erase it and delete life
+	Params: ship sprite, player
+	Returns: none
+	*******************/
 	void removeBomb(Sprite &s, Player &p)
 	{
 		list<Bomb>::iterator iter;
@@ -45,6 +59,12 @@ public:
 		}
 
 	}
+	/***************
+	draw
+	draws all bombs to the scree
+	Params: renderwindow
+	Returns: None
+	*******************/
 	void draw(RenderWindow &win)
 	{
 		list<Bomb>::iterator iter;
@@ -54,6 +74,12 @@ public:
 		}
 	}
 
+	/***************
+	setHits
+	- Check if any bomb has hit the ship
+	Params: ship sprite
+	Returns: None
+	*******************/
 	void setHits(Sprite &s)
 	{
 		list<Bomb>::iterator iter;
