@@ -19,9 +19,7 @@ private:
 public:
 	AlienMgr(Texture &text)
 	{
-		Vector2f pos;
-		pos.y = 20;
-		pos.x = 0;
+		Vector2f pos(20, 0);
 		for (int i = 0; i < 10; i++)
 		{
 			pos.x += 65;
@@ -158,7 +156,7 @@ public:
 	{
 		list<Alien>::iterator iter;
 
-		for (iter = alienList.begin(); iter != alienList.end(); iter++)
+		for (iter = alienList.begin(); iter != alienList.end();)
 		{
 			iter = alienList.erase(iter);
 		}

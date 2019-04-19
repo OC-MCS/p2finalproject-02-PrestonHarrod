@@ -129,7 +129,7 @@ int main()
 	
 	// initial position of the ship will be approx middle of screen
 	float shipX = window.getSize().x / 2.0f;
-	float shipY = window.getSize().y / 1.2f;
+	float shipY = window.getSize().y / 1.3f;
 	ship.setPosition(shipX, shipY);
 	
 	MissileMgr missileMgr;
@@ -185,15 +185,13 @@ int main()
 		}
 		else if (play.getLevel() == 1 && play.getLives() > 0) 
 		{
-			if (hasWon == true)
-			{
-				drawUI.drawWinner(window);
-			}
 			counter++;
 			if ((counter % 15) == 14)
 			{
 				shoot = true;
 			}
+			hasWon = false;
+			hasLost = false;
 			while (window.pollEvent(event))
 			{
 				// "close requested" event: we close the window
