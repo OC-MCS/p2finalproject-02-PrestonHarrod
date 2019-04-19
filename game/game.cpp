@@ -168,9 +168,7 @@ int main()
 					//userinput for settings
 					Vector2f mousePos = window.mapPixelToCoords(Mouse::getPosition(window));
 					drawUI.beginGame(mousePos, play);
-
 				}
-
 			}
 			window.clear();
 			window.draw(background);
@@ -217,6 +215,19 @@ int main()
 			window.draw(background);
 			moveShip(ship);
 			window.draw(ship);
+			drawUI.drawKillAmount(window, play);
+			drawUI.drawLives(window, play);
+			drawUI.drawLevel(window, play);
+			alienMgr.setHit(missileMgr);
+			alienMgr.removeAlien(ship, play);
+			alienMgr.draw(window);
+			bombMgr.removeBomb(ship, play);
+			bombMgr.setHits(ship);
+			bombMgr.draw(window);
+			missileMgr.removeMissile(background);
+			missileMgr.drawMissiles(window);
+			
+			
 			if (counter % 50 == 1)
 			{
 				drop = true;
@@ -227,21 +238,6 @@ int main()
 				alienMgr.dropBombs(bombTexture, bombMgr);
 				drop = false;
 			}
-
-			drawUI.drawKillAmount(window, play);
-			drawUI.drawLives(window, play);
-			drawUI.drawLevel(window, play);
-
-			alienMgr.setHit(missileMgr);
-			alienMgr.removeAlien(ship, play);
-			alienMgr.draw(window);
-
-			bombMgr.removeBomb(ship, play);
-			bombMgr.setHits(ship);
-			bombMgr.draw(window);
-
-			missileMgr.removeMissile(background);
-			missileMgr.drawMissiles(window);
 
 			if (alienMgr.returnAlienCount() == 0)
 			{
@@ -317,22 +313,15 @@ int main()
 				window.draw(background);
 				drawUI.drawEndGame(window);
 				resetGame(AlienTexture, level2Alien, play, alienMgr, level2Aliens);
-				//play.setKills(0);
-				//play.setLives(3);
-				//play.setLevel(0);
 				drawUI.drawStart(window);
 				hasLost = true;
 			}
-
 			if (play.getKills() == 20)
 			{
 				window.clear();
 				window.draw(background);
 				drawUI.drawWinner(window);
 				resetGame(AlienTexture, level2Alien, play, alienMgr, level2Aliens);
-				//play.setKills(0);
-				//play.setLevel(0);
-				//play.setLives(3);
 				drawUI.drawStart(window);
 				hasWon = true;
 			}
